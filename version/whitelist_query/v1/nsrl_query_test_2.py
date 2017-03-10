@@ -2,7 +2,7 @@ import nsrl_query as nsrl
 
 def main():
 	isFound = False
-	path = r'C:\Users\gsmjms\Documents\IS Docs\scripts\CB\response\version\whitelist_query\sample_list.txt'
+	path = r'path to sample_list.txt'
 	conn = nsrl.connect_mysql('192.168.56.5', 'root', 'password', 'whitelist')
 	with open(path, 'r') as hashes:
 		for h in hashes:
