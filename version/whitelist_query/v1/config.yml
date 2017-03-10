@@ -1,0 +1,5 @@
+# Config YAML
+- hostname: 192.168.56.5
+  user: gsmsocco
+  password: GSM$0cc0!!!!
+  database: whitelist

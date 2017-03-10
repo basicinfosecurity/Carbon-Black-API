@@ -23,7 +23,7 @@ def main():
 	parser.add_argument("-l", "--list", dest="list_file", help="List file of binaries to be banned. Also accepts csv files.")
 	#Not yet supported --enable flag
 	parser.add_argument("-e", "--enable", dest="enable", help="Enable flag. Include this flag to set the hash/es status to 'active' in the list.", action='store_true')
-	parser.add_argument("-d", "--disable", dest="disable", help="Disable flag. Include this flag to set the hash/es status to 'inactive' in the list.", action='store_true')
+	parser.add_argument("-d", "--disable", dest="enable", help="Disable flag. Include this flag to set the hash/es status to 'inactive' in the list.", action='store_false')
 	
 	parser.add_argument("-x", "--export", help="Export ban list to csv", action='store_true')
 	
@@ -34,7 +34,7 @@ def main():
 	global exit_code
 	exit_code = 0
 	#~ global data
-	
+			
 	try:
 		if opts.server_url and opts.api_token:
 			if not(opts.server_url.startswith("http") and opts.server_url.startswith("https")):
@@ -96,7 +96,7 @@ def main():
 	print("Exit code is {}".format(exit_code))
 	sys.exit(exit_code)
 
-def ban_hash(md5_hash, note, disable_flag):
+def ban_hash(md5_hash, note, enable_flag=True):
 	return_code = 0
 	try:
 		if regex.match(r"([a-fA-F\d]{32})", md5_hash) is None:
@@ -106,19 +106,22 @@ def ban_hash(md5_hash, note, disable_flag):
 				logging.exception(ime)
 				return_code = ime.exit_code
 		else:
-			if disable_flag:
+			if enable_flag:
+				data = {"md5hash" : md5_hash, "text" : note}
+				bh = requests.post(url=request_url,headers=headers,verify=False, data=json.dumps(data))
+				if bh.status_code == 409:
+					if bh.text.endswith("already exists"):
+						raise ItemExistsError(sys.exc_info(), "Duplicate found for ")
+					else:
+						raise ItemExistsError(sys.exc_info(), bh.text)
+				msg = "Banned {0} with note: {1}".format(md5_hash, note)
+			else:				
 				bh = requests.get(url=''.join([request_url, '?filter=md5hash == ', md5_hash]),headers=headers,verify=False)
 				latest_record = bh.json()[0]['audit'][0]
 				#It seems that an entity body is allowed for this delete request
 				data = {"text" : latest_record['text']}
 				disable_binary = requests.delete(url=''.join([request_url, '/', md5_hash]),headers=headers,verify=False, data=json.dumps(data))
 				msg = "Ban for {} has been disabled/deactivated".format(md5_hash)
-			else:
-				data = {"md5hash" : md5_hash, "text" : note}
-				bh = requests.post(url=request_url,headers=headers,verify=False, data=json.dumps(data))
-				if bh.status_code == 409:
-					raise ItemExistsError(sys.exc_info(), "Duplicate found for ")
-				msg = "Banned {0} with note: {1}".format(md5_hash, note)
 			logging.info(msg)
 	except requests.exceptions.RequestException as re:
 		logging.exception("Server was unable to process request {}".format(md5_hash))
