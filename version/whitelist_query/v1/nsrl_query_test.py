@@ -4,16 +4,8 @@ from mysql.connector import errorcode as errorcode
 
 def main():
 	try:
-		#~ conn = nsrl.connect_mysql('192.168.56.5', 'root', 'password', 'whitelist')
-		#~ conn = nsrl.connect_mysql('192.168.56.5', 'gsmsocco', 'GSM$0cc0!!!!', 'whitelist')
-		#~ conn = nsrl.connect_mysql('192.168.56.5', 'gsmsocco', 'GSM$0cc0!!!!', 'swhitelist')
-		conn = nsrl.connect_mysql('192.168.56.5', 'gsmsocco', 'GSM$0cc0!!!!', 'whitelist')
-		#~ conn = nsrl.connect_mysql('', 'gsmsocco', 'GSM$0cc0!!!!', 'whitelist')
-		#~ conn = nsrl.connect_mysql('192.168.56.5', 'roots', 'password', 'whitelist')
-		#~ conn = nsrl.connect_mysql('192.168.56.5', 'root', 'passwords', 'whitelist')
-		#~ conn = nsrl.connect_mysql('192.168.56.5', '', '', 'whitelist')
-		#~ conn = nsrl.connect_mysql('192.168.56.5', 'root', 'password', 'asd')
-		
+		conn = nsrl.connect_mysql('192.168.56.5', 'user', 'pa$$w0rd', 'whitelist')
+				
 		#~ md5 = "12896823fb95bfb3dc9b46bcaedc9923"
 		#~ md5 = "97B89125D66CCFFE8E862B1FDFDEB893"
 		#~ md5 = "BF379376C124B19A7535CBA8EA179802"
