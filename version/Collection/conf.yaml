@@ -1,0 +1,17 @@
+#Config YAML
+protection:
+ url: https://cbprotection.bakernet.com/
+ token: YOURTOKENHERE
+ path: CbProtectionFiles
+ interval: 30
+ counter: 3
+response:
+ url: https://cbresponse.bakernet.com/
+ token: YOURTOKENHERE
+ path: CbResponseFiles
+banner: "Cb File Collector"
+logs: logs
+archives: archives
+password: virus
+address: localhost
+port: 6060
